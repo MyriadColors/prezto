@@ -30,6 +30,7 @@ zstyle ':prezto:load' zfunction 'zargs' 'zmv'
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
+  'my-custom-funcs' \
   'environment' \
   'terminal' \
   'editor' \
@@ -46,11 +47,9 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'pacman' \
   'directory' \
-  'autosuggestions' \
   'archive' \
   'fasd' \
-  'rsync' \
-  'my-custom-funcs'
+  'rsync'
 
 #
 # Autosuggestions

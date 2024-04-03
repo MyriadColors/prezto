@@ -10,7 +10,7 @@
 #
 
 # Set case-sensitivity for completion, history lookup, etc.
-# zstyle ':prezto:*:*' case-sensitive 'yes'
+zstyle ':prezto:*:*' case-sensitive 'yes'
 
 # Color output (auto set to 'no' on dumb terminals).
 zstyle ':prezto:*:*' color 'yes'
@@ -22,10 +22,10 @@ zstyle ':prezto:*:*' color 'yes'
 # zstyle ':prezto:load' pmodule-allow-overrides 'yes'
 
 # Set the Zsh modules to load (man zshmodules).
-# zstyle ':prezto:load' zmodule 'attr' 'stat'
+zstyle ':prezto:load' zmodule 'attr' 'stat'
 
 # Set the Zsh functions to load (man zshcontrib).
-# zstyle ':prezto:load' zfunction 'zargs' 'zmv'
+zstyle ':prezto:load' zfunction 'zargs' 'zmv'
 
 # Set the Prezto modules to load (browse modules).
 # The order matters.
@@ -39,14 +39,24 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'history-substring-search' \
-  'prompt'
+  'prompt' \
+  'git' \
+  'helper' \
+  'python' \
+  'syntax-highlighting' \
+  'pacman' \
+  'directory' \
+  'autosuggestions' \
+  'archive' \
+  'fasd' |
+  'rsync'
 
 #
 # Autosuggestions
 #
 
 # Set the query found color.
-# zstyle ':prezto:module:autosuggestions:color' found ''
+zstyle ':prezto:module:autosuggestions:color' found ''
 
 #
 # Completions
@@ -67,10 +77,10 @@ zstyle ':prezto:load' pmodule \
 zstyle ':prezto:module:editor' key-bindings 'emacs'
 
 # Auto convert .... to ../..
-# zstyle ':prezto:module:editor' dot-expansion 'yes'
+zstyle ':prezto:module:editor' dot-expansion 'yes'
 
 # Allow the zsh prompt context to be shown.
-#zstyle ':prezto:module:editor' ps-context 'yes'
+zstyle ':prezto:module:editor' ps-context 'yes'
 
 #
 # Git
@@ -91,38 +101,38 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 #
 
 # Set the file to save the history in when an interactive shell exits.
-# zstyle ':prezto:module:history' histfile "${ZDOTDIR:-$HOME}/.zsh_history"
+zstyle ':prezto:module:history' histfile "${ZDOTDIR:-$HOME}/.zsh_history"
 
 # Set the maximum  number  of  events  stored  in  the  internal history list.
-# zstyle ':prezto:module:history' histsize 10000
+zstyle ':prezto:module:history' histsize 10000
 
 # Set the maximum number of history events to save in the history file.
-# zstyle ':prezto:module:history' savehist 10000
+zstyle ':prezto:module:history' savehist 10000
 
 #
 # History Substring Search
 #
 
 # Set the query found color.
-# zstyle ':prezto:module:history-substring-search:color' found ''
+zstyle ':prezto:module:history-substring-search:color' found ''
 
 # Set the query not found color.
-# zstyle ':prezto:module:history-substring-search:color' not-found ''
+zstyle ':prezto:module:history-substring-search:color' not-found ''
 
 # Set the search globbing flags.
-# zstyle ':prezto:module:history-substring-search' globbing-flags ''
+zstyle ':prezto:module:history-substring-search' globbing-flags ''
 
 # Enable search case-sensitivity.
-# zstyle ':prezto:module:history-substring-search' case-sensitive 'yes'
+zstyle ':prezto:module:history-substring-search' case-sensitive 'yes'
 
 # Enable search for fuzzy matches.
-# zstyle ':prezto:module:history-substring-search' fuzzy 'yes'
+zstyle ':prezto:module:history-substring-search' fuzzy 'yes'
 
 # Enable search uniqueness.
-# zstyle ':prezto:module:history-substring-search' unique 'yes'
+zstyle ':prezto:module:history-substring-search' unique 'yes'
 
 # Enable prefixed search.
-# zstyle ':prezto:module:history-substring-search' prefixed 'yes'
+zstyle ':prezto:module:history-substring-search' prefixed 'yes'
 
 #
 # macOS
@@ -136,7 +146,7 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 #
 
 # Set the Pacman frontend.
-# zstyle ':prezto:module:pacman' frontend 'yaourt'
+zstyle ':prezto:module:pacman' frontend 'yaourt'
 
 #
 # Prompt
@@ -145,7 +155,7 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'sorin'
+zstyle ':prezto:module:prompt' theme 'paradox'
 
 # Set the working directory prompt display length.
 # By default, it is set to 'short'. Set it to 'long' (without '~' expansion)
@@ -178,7 +188,7 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 #
 
 # Auto start a session when Zsh is launched in a local terminal.
-# zstyle ':prezto:module:screen:auto-start' local 'yes'
+zstyle ':prezto:module:screen:auto-start' local 'yes'
 
 # Auto start a session when Zsh is launched in a SSH connection.
 # zstyle ':prezto:module:screen:auto-start' remote 'yes'
@@ -219,13 +229,13 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 #
 
 # Auto set the tab and window titles.
-# zstyle ':prezto:module:terminal' auto-title 'yes'
+zstyle ':prezto:module:terminal' auto-title 'yes'
 
 # Set the window title format.
-# zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
+zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
 
 # Set the tab title format.
-# zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
+zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
 
 # Set the terminal multiplexer title format.
 # zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
@@ -253,4 +263,4 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 # Enabled safe options. This aliases cp, ln, mv and rm so that they prompt
 # before deleting or overwriting files. Set to 'no' to disable this safer
 # behavior.
-# zstyle ':prezto:module:utility' safe-ops 'yes'
+zstyle ':prezto:module:utility' safe-ops 'yes'

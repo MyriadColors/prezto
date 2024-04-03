@@ -1,4 +1,32 @@
-  # Python functions
+# Environment Variables
+export YTDIR="$HOME/Youtube"
+export YTVDIR="$YTDIR/Videos"
+export YTADIR="$YTDIR/Audio"
+export PYSCRIPTDIR="$HOME/pybashscript"
+export WEBSITEDIR="$HOME/Websites"
+export HOME="$HOME"
+export DESKTOP="$HOME/Desktop/"
+export CODING="$HOME/Desktop/Coding"
+export CPP="$CODING/CPP"
+export JAVA="$CODING/Java"
+export PYTHON="$CODING/Python"
+export TIC80="$CODING/tic80code"
+export CSHARP="$CODING/charp"
+export CLANG="$CODING/C"
+export RUST="$CODING/rust"
+export GOLANG="$CODING/golang"
+export JAVASCRIPT="$CODING/javascript"
+export MOJO="$CODING/mojo"
+export ODIN="$CODING/Odin"
+export ZIG="$CODING/zig"
+export ZSHCONFIG="~/.zshrc"
+export ZSHALIASES="~/.aliases"
+export ZSHFUNCS="~/.zshfuncs"
+export BASHSCRIPTS="$HOME/bash_scripts"
+export PYBASHSCRIPTS="$HOME/pybashscript/"
+export DEFAULTEDITOR="codium"
+
+# Python functions
 function pipi() {
   # Description: Installs python packages via yay
   local pkgs=""

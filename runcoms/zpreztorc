@@ -48,8 +48,9 @@ zstyle ':prezto:load' pmodule \
   'directory' \
   'autosuggestions' \
   'archive' \
-  'fasd' |
-  'rsync'
+  'fasd' \
+  'rsync' \
+  'my-custom-funcs'
 
 #
 # Autosuggestions

@@ -59,10 +59,11 @@ alias ysgames='ys game'       # Search for game packages
 
 # Zprestoc Command
 alias refresh="source ~/.zprezto/runcoms/zshrc"
+alias my_configs="codium /home/pedrot/.zprezto/modules/my-custom-funcs/init.zsh"
 
 # Environment Variables
 export YTDIR="$HOME/Youtube"
-export YTVDIR="$YTDIR/Videos"
+export YTVDIR="$YTDIR/Video"
 export YTADIR="$YTDIR/Audio"
 export PYSCRIPTDIR="$HOME/pybashscript"
 export WEBSITEDIR="$HOME/Websites"
@@ -88,7 +89,14 @@ export BASHSCRIPTS="$HOME/bash_scripts"
 export PYBASHSCRIPTS="$HOME/pybashscript/"
 export DEFAULTEDITOR="codium"
 
-# Python functions
+# CPP Commands
+alias cppb='g++ *.cpp -o main'        # Builds ALL .cpp files within a directory
+alias cppr='g++ *.cpp -o main && ./main' # Builds and runs ALL .cpp files within a directory
+alias cpprray='g++ *.cpp -o game -lraylib -lm && ./main' # Builds and runs ALL .cpp files with raylib
+alias cppbray='g++ *.cpp -o game -lraylib -lm' # Builds All .cpp files with raylib
+alias cppro='g++ main.cpp main && ./main' # Builds and Runs main.cpp
+alias cppra='g++ main.cpp main -lraylib -lm && ./main' # Builds and Runs main.cpp with raylib
+
 function pipi() {
   # Description: Installs python packages via yay
   local pkgs=""
@@ -149,17 +157,32 @@ function pydlyt() {
   fi
 }
 
-function watchstream() {
+function watch() {
   # Description: Watches a stream using streamlink
   emulate -L zsh
-  local -A args
+  local quality="best"
+  local player="vlc"
 
-  argparse 'quality=' 'player=' -- $argv
+  # Parse arguments using getopts
+  while getopts ":q:p:" opt; do
+    case $opt in
+      q) quality="$OPTARG" ;;
+      p) player="$OPTARG" ;;
+      \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+    esac
+  done
 
-  args+=(quality="${_flag_quality:-best}")
-  args+=(player="${_flag_player:-vlc}")
+  # Shift arguments to skip processed options
+  shift $((OPTIND-1))
 
-  streamlink --player="${args[player]}" "$argv[1]" "${args[quality]}"
+  # Ensure a stream URL is provided
+  if [[ -z "$1" ]]; then
+    echo "Error: Please provide a stream URL." >&2
+    exit 1
+  fi
+
+  # Call streamlink with parsed arguments
+  streamlink --player="$player" "$1" "${quality}"
 }
 
 function dlweb() {
@@ -249,15 +272,6 @@ function generate_rng() {
     echo $num
 }
 
-#read man pages on okular as pdf files
-function manpdf() {
-  local target=$1
-
-  man -Tpdf "$1" | okular -
-}
-
-alias man="manpdf"
-
 # Command not found handler is used to display a message when a command is not found in the repository
 function command_not_found_handler {
     local purple='\e[1;35m' bright='\e[0;1m' green='\e[1;32m' reset='\e[0m'
@@ -288,7 +302,7 @@ function command_not_found_handler {
 
 
 # This function will move all files in the current directory to another directory
-mvFiles() {
+mvfiles() {
     if [ "$1" = "." ]; then
         confirm && mv * "$2"
     else
@@ -332,72 +346,6 @@ dlWebsite() {
     confirm && eval wget --random-wait -r --level="$2" -p -e robots=off -U mozilla $1
 }
 
-queryPacks() {
-    pacman -Ss $1 | paste - - | grep --color=always -e '/'$1'' | less -R
-}
-
-dlyt() {
-    # Check for yt-dlp existence
-    if ! command -v yt-dlp &> /dev/null; then
-        echo "Error: yt-dlp is not installed. Please install it before using this script."
-        exit 1
-    fi
-
-    local media_type="$1"
-    local url="$2"
-    local target="$3"
-    local index="$4"
-    #local extra="$5"
-
-    local defaultDir="$HOME/Youtube"
-
-    if [ "$media_type" = "h" ] || [ "$media_type" = "-h" ] || [ "$media_type" = "--help" ]; then
-        echo "Usage: dlyt <media_type> (audio/video) <url> <dest_dir> (optional) <index> (optional) <extra> (optional)"
-        echo "If no destination directory is specified, it will be downloaded to the default directory for the media type."
-        echo "If no index is specified, it will download every video in the playlist."
-        echo "Example: dlyt audio https://www.youtube.com/playlist?list=PL1g_M8-ZPy79UTOUiheecrOlGLVMtoPU6 Music 1:5"
-        echo "Will download the first 5 videos in the playlist 'Music' to the 'Music' directory in the default directory for audio."
-        echo "You can also type dlyt defaultDir to see where your files are going."
-        echo "If you want to download to the default directory just add '.' at the third argument."
-        echo "If you want to ignore index, add '0' to the fourth argument."
-        exit 1
-    fi
-
-    if [ "$media_type" = "audio" ]; then
-        defaultDir+="/Audio"
-        if [ "$target" = "." ]; then
-            if [ "$index" = "0" ]; then
-                yt-dlp -N 5 -c -f 'ba' -x --audio-format mp3 -P $defaultDir $url
-            else
-                yt-dlp -N 5 -c -f 'ba' -x --audio-format mp3 -P $defaultDir -I $index $url
-            fi
-        else
-            mkdir -p $defaultDir/$target/
-            if [ "$index" = "0" ]; then
-                yt-dlp --progress -N 5 -c -f 'ba' -x --audio-format mp3 -P $defaultDir/$target/ $url
-            else
-                yt-dlp --progress -N 5 -c -f 'ba' -x --audio-format mp3 -P $defaultDir/$target/ -I $index $url $defaultDir/$target
-            fi
-        fi
-    elif [ "$media_type" = "video" ]; then
-        defaultDir+="/Video"
-        if [ "$target" = "." ]; then
-            if [ "$index" = "0" ]; then
-                yt-dlp --progress -N 5 -c -f 'bestvideo[height<=720]+bestaudio/best[height<=720]+bestaudio' -P $defaultDir $url
-            else
-                yt-dlp -N 5 -c -f 'bestvideo[height<=720]+bestaudio/best[height<=720]+bestaudio' -P $defaultDir -I $index $url
-            fi
-        else
-            mkdir -p $defaultDir/$target/
-            if [ "$index" = "0" ]; then
-                yt-dlp --progress -N 5 -c -f 'bestvideo[height<=720]+bestaudio/best[height<=720]+bestaudio' -P $defaultDir/$target/ $url
-            else
-                yt-dlp --progress -N 5 -c -f 'bestvideo[height<=720]+bestaudio/best[height<=720]+bestaudio' -P $defaultDir/$target/ -I $index $url
-            fi
-        fi
-    fi
-}
-
 play_media() {
     local media_type="$1"
     local filepath="$2"
@@ -438,69 +386,6 @@ function backup_git() {
   echo "Backup completed for repositories from user: $account_name"
 }
 
-function new_project() {
-  # Description: Creates a new project with optional git remote.
-  # Usage: new_project language project_name extension [--remote remote_url]
-
-  emulate -L zsh
-  local -A args
-
-  argparse 'h/help' -- $argv
-
-  if [[ $_flag_help ]]; then
-    echo "Usage: new_project language project_name extension [--remote remote_url]"
-    echo "  language: the programming language of the project"
-    echo "  project_name: the name of the project"
-    echo "  extension: the name of the extension for the language"
-    echo "  --remote remote_url: add a git remote"
-    echo "  examples:"
-    echo "    new_project python py my_project"
-    echo "    new_project rust rs my_project --remote git@github.com:user/my_project.git"
-    return 0
-  fi
-
-  local language="${argv[1]}"
-  local project_name="${argv[2]}"
-  local extension="${argv[3]}"
-
-  if [[ -z "$language" ]]; then
-    echo "Please specify a language"
-    return 1
-  fi
-
-  if [[ -z "$project_name" ]]; then
-    echo "Please specify a project name"
-    return 1
-  fi
-
-  if [[ -z "$extension" ]]; then
-    echo "Please specify an extension"
-    return 1
-  fi
-
-  local location="/home/pedrot/Desktop/Coding/$language/$project_name"
-  echo "Project location: $location"
-
-  mkdir -p "$location"
-
-  echo "Opening $location in $editor"
-  cd "$location"
-  touch "main.$extension"
-  git init
-  git add "main.$extension"
-  git commit -m "Initial commit"
-
-  if [[ "$argv[4]" == "--remote" ]]; then
-    local remote_url="${argv[5]}"
-    git remote add origin "$remote_url"
-    git push -u origin master
-  fi
-
-  $editor .
-
-  echo "Created a new $language project $project_name at $location."
-}
-
 function edit_configs() {
   # Description: all of the zsh config files
 
@@ -535,6 +420,29 @@ function push_to_github() {
   done
 }
 
-function printt() {
-  echo $1
+function create_project() {
+  # Get arguments
+  local project_name="$1"
+  local language="$2"
+  local extension="$3"
+
+  # Validate arguments
+  if [[ -z "$project_name" || -z "$language" || -z "$extension" ]]; then
+    echo "Usage: create_project <project_name> <language> <extension>"
+    return 1
+  fi
+
+  # Build directory path
+  local project_dir="/home/pedrot/Desktop/Coding/$language/$project_name"
+
+  # Create directory structure
+  mkdir -p "$project_dir" || { echo "Error creating directory: $project_dir"; return 1; }
+
+  # Create main file with extension
+  touch "$project_dir/main.$extension"
+
+  # Initialize git repository
+  git init -b main "$project_dir" || { echo "Error initializing git repository"; return 1; }
+
+  echo "Project '$project_name' created in $project_dir"
 }

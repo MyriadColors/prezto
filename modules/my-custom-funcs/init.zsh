@@ -97,6 +97,12 @@ alias cppbray='g++ *.cpp -o game -lraylib -lm' # Builds All .cpp files with rayl
 alias cppro='g++ main.cpp main && ./main' # Builds and Runs main.cpp
 alias cppra='g++ main.cpp main -lraylib -lm && ./main' # Builds and Runs main.cpp with raylib
 
+# VCPK Commands (assuming you have VCPKG installed)
+alias vcpki='vppkg install'  # Installs cpp package via vcpkg
+alias vcpks='vcpkg search'    # Searches cpp package via vcpkg
+alias vcpkg_upd='cd /home/pedrot/vcpkg && gp' # Updates vcpkg repository
+alias vcpkg='sudo vcpkg update' # Updates vcpkg packages
+
 function pipi() {
   # Description: Installs python packages via yay
   local pkgs=""

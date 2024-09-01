@@ -57,6 +57,8 @@ alias yspy='ys -python'       # Search for python packages
 alias yps='yay -Ps'           # List all installed yay packages
 alias ysgames='ys game'       # Search for game packages
 
+# 
+
 # Zprestoc Command
 alias refresh="source ~/.zprezto/runcoms/zshrc"
 alias my_configs="codium /home/pedrot/.zprezto/modules/my-custom-funcs/init.zsh"
@@ -451,4 +453,51 @@ function create_project() {
   git init -b main "$project_dir" || { echo "Error initializing git repository"; return 1; }
 
   echo "Project '$project_name' created in $project_dir"
+}
+
+confirm_v2() {
+    echo "$1? (y/n)"
+    read overwrite
+    [[ "$overwrite" != "y" && "$overwrite" != "Y" ]]
+}
+
+merge() {
+  if [[ "$#" -lt 3 ]]; then
+    echo "Usage: merge file1 file2 ... -o outputfile"
+    return 1
+  fi
+
+  # Find the output file by searching for the "-o" flag
+  for i in "$@"; do
+    if [[ "$i" == "-o" ]]; then
+      outfile="${@[$(($i+1))]}"
+      break
+    fi
+  done
+
+  if [[ -z "$outfile" ]]; then
+    echo "No output file specified."
+    return 1
+  fi
+
+  # Remove the "-o" and output file from the arguments list
+  args=("${(@)@}" "-o" "$outfile")
+
+  # Overwrite or create the output file
+  > "$outfile"
+
+  # Loop through all files and append their content to the output file
+  for file in "$@"; do
+    if [[ "$file" != "-o" && "$file" != "$outfile" ]]; then
+      if [[ -f "$file" ]]; then
+        echo "=== $file ===" >> "$outfile"
+        cat "$file" >> "$outfile"
+        echo >> "$outfile" # Add a newline between file contents
+      else
+        echo "Warning: $file does not exist, skipping..."
+      fi
+    fi
+  done
+
+  echo "Merged files into $outfile."
 }

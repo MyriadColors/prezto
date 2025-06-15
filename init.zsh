@@ -195,3 +195,9 @@ unset zfunction{s,}
 zstyle -a ':prezto:load' pmodule 'pmodules'
 pmodload "$pmodules[@]"
 unset pmodules
+
+# Laravel
+export PATH=$PATH:/home/pedrot/.config/composer/vendor/bin/
+
+# Gatsby
+export PATH="/home/pedrot/.bun/bin:$PATH"

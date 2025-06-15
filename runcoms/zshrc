@@ -13,3 +13,27 @@ source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# BEGIN opam configuration
+# This is useful if you're using opam as it adds:
+#   - the correct directories to the PATH
+#   - auto-completion for the opam binary
+# This section can be safely removed at any time if needed.
+[[ ! -r '/home/pedrot/.opam/opam-init/init.zsh' ]] || source '/home/pedrot/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+# END opam configuration
+
+# pnpm
+export PNPM_HOME="/home/pedrot/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+export PATH="$PATH:/home/pedrot/.modular/bin"
+export LD_LIBRARY_PATH=/home/pedrot/.local/lib/arch-mojo:$LD_LIBRARY_PATH
+
+# Created by `pipx` on 2024-12-17 15:17:23
+export PATH="$PATH:/home/pedrot/.local/bin"
+eval "$(gh copilot alias -- zsh)"
+eval "$(gh copilot alias -- zsh)"

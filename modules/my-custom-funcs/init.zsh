@@ -16,20 +16,18 @@ alias gozig='cd $HOME/Desktop/Coding/zig/'
 
 # Terminal Aliases
 alias c='clear'         # Clears the terminal
-alias cl='clear'        # clears the terminal
-alias cls='clear'       # "lears the terminal" (typo, keeps clear)
-alias clr='clear'       # clears the terminal
+alias cl='clear'        # Clears the terminal
+alias cls='clear'       # Clears the terminal
+alias clr='clear'       # Clears the terminal
 alias q='exit'           # Leaves the terminal
-alias :q='exit'         # Leaves the terminal
 alias ccat='pygmentize -g' # Cats files in human mode
 alias home='cd $HOME'    # Goes to home directory
 alias homedir='echo $HOME' # "Goes to home directory" (red
 
 # SillyTavern Commands
-alias start-st="cd /home/pedrot/SillyTavern-Launcher/SillyTavern/ && sudo ./start.sh"
-alias update-st="cd /home/pedrot/SillyTavern-Launcher/ && sudo ./launcher.sh"
-alias install-st="cd /home/pedrot/SillyTavern-Launcher/ && sudo ./install.sh"
-alias open-st="cd /home/pedrot/SillyTavern-Launcher/"
+alias start-st="cd /home/pedrot/Downloads/pron/games/SillyTavern-Launcher/SillyTavern/ && git pull && sudo ./start.sh"
+alias update-st="cd /home/pedrot/Downloads/pron/games/SillyTavern-Launcher/SillyTavern/ && git pull"
+alias open-st="cd /home/pedrot/Downloads/pron/games/SillyTavern-Launcher/SillyTavern/"
 
 # Default folders
 alias dl="cd ~/Downloads"  # Download folder
@@ -57,8 +55,6 @@ alias yspy='ys -python'       # Search for python packages
 alias yps='yay -Ps'           # List all installed yay packages
 alias ysgames='ys game'       # Search for game packages
 
-# 
-
 # Zprestoc Command
 alias refresh="source ~/.zprezto/runcoms/zshrc"
 alias my_configs="codium /home/pedrot/.zprezto/modules/my-custom-funcs/init.zsh"
@@ -73,6 +69,7 @@ export HOME="$HOME"
 export DESKTOP="$HOME/Desktop/"
 export CODING="$HOME/Desktop/Coding"
 export CPP="$CODING/CPP"
+export PHP="CODING/php"
 export JAVA="$CODING/Java"
 export PYTHON="$CODING/Python"
 export TIC80="$CODING/tic80code"
@@ -91,13 +88,27 @@ export BASHSCRIPTS="$HOME/bash_scripts"
 export PYBASHSCRIPTS="$HOME/pybashscript/"
 export DEFAULTEDITOR="codium"
 
+# SillyTavern Commands
+alias update_st="cd $ST && git pull"
+alias start_st="cd $ST && bash start.sh"
+alias upd_start_st="cd $ST && git pull && bash start.sh"
+
+# C Commands
+alias cbld="clang main.c -o main -Wextra -Wall"                # Builds main.c
+alias crun="clang main.c -o main -Wextra -Wall &&./main"       # Builds and runs main.c into ./main
+alias cdbg="clang main.c DMEMORY_SAFETY_MODE=1 -o main -Wextra -Wall"    # Builds main.c with memory safety functions (needs memory_safety.h)
+alias cdbgno="clang main.c DMEMORY_SAFETY_MODE=0 -o main -Wextra -Wall"  # Builds main.c without memory safety functions (needs memory_safety.h)
+alias cdbgrun="clang main.c DMEMORY_SAFETY_MODE=1 -o main -Wextra -Wall && ./main"
+alias cdbgnorun="clang main.c DMEMORY_SAFETY_MODE=0 -o main -Wextra -Wall && ./main"
+alias craylibflags="-lraylib -lm" # Adds the flags to compile with raylib flags, this requires one of the bld commands
+
 # CPP Commands
-alias cppb='g++ *.cpp -o main'        # Builds ALL .cpp files within a directory
-alias cppr='g++ *.cpp -o main && ./main' # Builds and runs ALL .cpp files within a directory
-alias cpprray='g++ *.cpp -o game -lraylib -lm && ./main' # Builds and runs ALL .cpp files with raylib
-alias cppbray='g++ *.cpp -o game -lraylib -lm' # Builds All .cpp files with raylib
-alias cppro='g++ main.cpp main && ./main' # Builds and Runs main.cpp
-alias cppra='g++ main.cpp main -lraylib -lm && ./main' # Builds and Runs main.cpp with raylib
+alias cppb='clang++ *.cpp -o main'        # Builds ALL .cpp files within a directory
+alias cppr='clang++ *.cpp -o main && ./main' # Builds and runs ALL .cpp files within a directory
+alias cpprray='clang++ *.cpp -o game -lraylib -lm && ./main' # Builds and runs ALL .cpp files with raylib
+alias cppbray='clang++ *.cpp -o game -lraylib -lm' # Builds All .cpp files with raylib
+alias cppro='clang++ main.cpp main && ./main' # Builds and Runs main.cpp
+alias cppra='clang++ main.cpp main -lraylib -lm && ./main' # Builds and Runs main.cpp with raylib
 
 # VCPK Commands (assuming you have VCPKG installed)
 alias vcpki='vppkg install'  # Installs cpp package via vcpkg
@@ -105,113 +116,128 @@ alias vcpks='vcpkg search'    # Searches cpp package via vcpkg
 alias vcpkg_upd='cd /home/pedrot/vcpkg && gp' # Updates vcpkg repository
 alias vcpkg='sudo vcpkg update' # Updates vcpkg packages
 
+# Path extensions
+# CE Toolchain
+export PATH=$PATH:/home/pedrot/CEdev/bin/
+# Agon Light Dev
+export Path=$PATH:/home/pedrot/AgDev/bin/
+
+function init_c_project() {
+    # Description: Initializes a C project with basic files
+    local project_name=$1
+    mkdcd "$CODING/clang/$project_name"
+    touch README.md
+    touch main.c
+    code .
+}
+
 function pipi() {
-  # Description: Installs python packages via yay
-  local pkgs=""
-  for pkg_name in "$@"
-  do
-    pkgs="$pkgs python-$pkg_name "
-  done
-  yi "$pkgs"
+    # Description: Installs python packages via yay
+    local pkgs=""
+    for pkg_name in "$@"
+    do
+        pkgs="$pkgs python-$pkg_name "
+    done
+    yi "$pkgs"
 }
 
 function pips() {
-  # Description: Searches python packages via yay
-  local pkgs=""
-  for pkg_name in "$@"
-  do
-    pkgs="$pkgs $pkg_name "
-  done
-  ys python "$pkgs"
+    # Description: Searches python packages via yay
+    local pkgs=""
+    for pkg_name in "$@"
+    do
+        pkgs="$pkgs $pkg_name "
+    done
+    ys python "$pkgs"
 }
 
 function pipr() {
-  # Description: Removes python packages via yay
-  local pkgs=""
-  for pkg_name in "$@"
-  do
-    pkgs="$pkgs python-$pkg_name "
-  done
-  yr "$pkgs"
+    # Description: Removes python packages via yay
+    local pkgs=""
+    for pkg_name in "$@"
+    do
+        pkgs="$pkgs python-$pkg_name "
+    done
+    yr "$pkgs"
 }
 
 function pydlyt() {
-  # Description: Downloads a youtube video as audio and video with a python script
-  local media_type=$1
-  local url=$2
-  local target_dir=$3
-  local index=$4
-  local action=$5
+    # Description: Downloads a youtube video as audio and video with a python script
+    local media_type=$1
+    local url=$2
+    local target_dir=$3
+    local index=$4
+    local action=$5
 
-  python $PYSCRIPTDIR/pydlyt.py $media_type $url --target_dir "$target_dir" --index $index
+    python $PYSCRIPTDIR/pydlyt.py $media_type $url --target_dir "$target_dir" --index $index
 
-  if [[ -n "$action" ]]; then
-    case "$action" in
-      goto)
-        if [[ $media_type == video ]]; then
-          cd $YTVDIR/$target_dir
-        elif [[ $media_type == audio ]]; then
-          cd $YTADIR/$target_dir
-        fi
-      ;;
-      play)
-        if [[ $media_type == video ]]; then
-          vlc $YTVDIR/$target_dir
-        elif [[ $media_type == audio ]]; then
-          vlc $YTADIR/$target_dir
-        fi
-      ;;
-    esac
-  fi
+    if [[ -n "$action" ]]; then
+        case "$action" in
+            goto)
+                if [[ $media_type == video ]]; then
+                    cd $YTVDIR/$target_dir
+                    elif [[ $media_type == audio ]]; then
+                    cd $YTADIR/$target_dir
+                fi
+            ;;
+            play)
+                if [[ $media_type == video ]]; then
+                    vlc $YTVDIR/$target_dir
+                    elif [[ $media_type == audio ]]; then
+                    vlc $YTADIR/$target_dir
+                fi
+            ;;
+        esac
+    fi
 }
 
 function watch() {
-  # Description: Watches a stream using streamlink
-  emulate -L zsh
-  local quality="best"
-  local player="vlc"
+    # Description: Watches a stream using streamlink
+    emulate -L zsh
+    local quality="best"
+    local player="vlc"
 
-  # Parse arguments using getopts
-  while getopts ":q:p:" opt; do
-    case $opt in
-      q) quality="$OPTARG" ;;
-      p) player="$OPTARG" ;;
-      \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
-    esac
-  done
+    # Parse arguments using getopts
+    while getopts ":q:p:" opt; do
+        case $opt in
+            q) quality="$OPTARG" ;;
+            p) player="$OPTARG" ;;
+            \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+        esac
+    done
 
-  # Shift arguments to skip processed options
-  shift $((OPTIND-1))
+    # Shift arguments to skip processed options
+    shift $((OPTIND-1))
 
-  # Ensure a stream URL is provided
-  if [[ -z "$1" ]]; then
-    echo "Error: Please provide a stream URL." >&2
-    exit 1
-  fi
+    # Ensure a stream URL is provided
+    if [[ -z "$1" ]]; then
+        echo "Error: Please provide a stream URL." >&2
+        exit 1
+    fi
 
-  # Call streamlink with parsed arguments
-  streamlink --player="$player" "$1" "${quality}"
+    # Call streamlink with parsed arguments
+    streamlink --player="$player" "$1" "${quality}"
 }
 
 function dlweb() {
-  # Description: Downloads a website recursively
-  local url=$1
-  local dest_dir=$2
+    # Description: Downloads a website recursively
+    local url=$1
+    local dest_dir=$2
 
-  if [[ -z "$dest_dir" ]]; then
-    echo "Please specify a destination subdirectory within $WEBSITEDIR"
-    return 1
-  fi
+    if [[ -z "$dest_dir" ]]; then
+        echo "Please specify a destination subdirectory within $WEBSITEDIR"
+        return 1
+    fi
 
-  local cmd="wget -m -r -l inf -k -p -E -e robots=off -U Mozilla --limit-rate=35K --random-wait -P $WEBSITEDIR/$dest_dir $url/"
+    local cmd="wget -m -r -l inf -k -p -E -e robots=off -U Mozilla --limit-rate=35K --random-wait -P $WEBSITEDIR/$dest_dir $url/"
 
-  read -q "Are you sure you want to run '$cmd'? [y/N] "
-  if [[ $? != 0 || ! "$REPLY" =~ ^[Yy]$ ]]; then
-    return 1
-  fi
+    read -q "Are you sure you want to run '$cmd'? [y/N] "
+    if [[ $? != 0 || ! "$REPLY" =~ ^[Yy]$ ]]; then
+        return 1
+    fi
 
-  mkdir -p "$WEBSITEDIR/$dest_dir"
-  eval "$cmd"
+    mkdir -p "$WEBSITEDIR/$dest_dir"
+    eval "$cmd"
 }
 
 function  openConfig() {
@@ -231,21 +257,21 @@ confirm() {
     if [ "$1" = "" ]; then
         read -r -p "${1:-Are you sure? [y/N]} " response
         case "$response" in
-        [yY][eE][sS] | [yY])
-            true
+            [yY][eE][sS] | [yY])
+                true
             ;;
-        *)
-            false
+            *)
+                false
             ;;
         esac
     else
         read -r -p "${1:-$4? [y/N]} " response
         case "$response" in
-        [yY][eE][sS] | [yY])
-            true
+            [yY][eE][sS] | [yY])
+                true
             ;;
-        *)
-            false
+            *)
+                false
             ;;
         esac
     fi
@@ -263,14 +289,14 @@ function addAlias() {
 }
 
 function rng() {
-  local min=$1
-  local max=$2
-  local howMany=$3
+    local min=$1
+    local max=$2
+    local howMany=$3
 
-  for i in $(seq 1 $howMany); do
-    sleep 1
-    echo "Num $i: $(generate_rng $min $max)"
-  done
+    for i in $(seq 1 $howMany); do
+        sleep 1
+        echo "Num $i: $(generate_rng $min $max)"
+    done
 }
 
 function generate_rng() {
@@ -370,37 +396,37 @@ dh() {
 }
 
 function backup_git() {
-  # Description: Backs up all public repositories from a GitHub account with commit history.
+    # Description: Backs up all public repositories from a GitHub account with commit history.
 
-  # Error handling: Ensure an account name is provided
-  if [[ -z "$1" ]]; then
-    echo "Error: Please provide a GitHub account name as an argument."
-    echo "Usage: $0 <account_name>"
-    return 1
-  fi
+    # Error handling: Ensure an account name is provided
+    if [[ -z "$1" ]]; then
+        echo "Error: Please provide a GitHub account name as an argument."
+        echo "Usage: $0 <account_name>"
+        return 1
+    fi
 
-  # Account name validation (optional): Consider adding checks for valid username patterns
-  account_name="$1"
+    # Account name validation (optional): Consider adding checks for valid username patterns
+    account_name="$1"
 
-  # Clone repositories with submodules and full history
-  while read -r url; do
-    echo " "
-    repo_name=${url##*/}  # Extract repository name from URL
-    echo "Backing up repository: $repo_name (URL: $url)"
-    git clone --recurse-submodules --progress "$url"
-    echo " "
-  done < <(curl "https://api.github.com/users/$account_name/repos?per_page=100" | jq -r '.[].clone_url')
+    # Clone repositories with submodules and full history
+    while read -r url; do
+        echo " "
+        repo_name=${url##*/}  # Extract repository name from URL
+        echo "Backing up repository: $repo_name (URL: $url)"
+        git clone --recurse-submodules --progress "$url"
+        echo " "
+    done < <(curl "https://api.github.com/users/$account_name/repos?per_page=100" | jq -r '.[].clone_url')
 
-  echo "Backup completed for repositories from user: $account_name"
+    echo "Backup completed for repositories from user: $account_name"
 }
 
 function edit_configs() {
-  # Description: all of the zsh config files
+    # Description: all of the zsh config files
 
-  $EDITOR ~/.zshrc
-  $EDITOR ~/.zshvars
-  $EDITOR ~/.zshfuncs
-  $EDITOR ~/.aliases
+    $EDITOR ~/.zshrc
+    $EDITOR ~/.zshvars
+    $EDITOR ~/.zshfuncs
+    $EDITOR ~/.aliases
 }
 
 function srczsh() {
@@ -408,51 +434,51 @@ function srczsh() {
 }
 
 function push_to_github() {
-  # Loop through each directory in the current directory
-  for dir in ./*; do
-    # Check if it's a directory and has a .git folder (Git repository)
-    if [ -d "$dir" ] && [ -d "$dir/.git" ]; then
-      cd "$dir"  # Change directory to the repository
+    # Loop through each directory in the current directory
+    for dir in ./*; do
+        # Check if it's a directory and has a .git folder (Git repository)
+        if [ -d "$dir" ] && [ -d "$dir/.git" ]; then
+            cd "$dir"  # Change directory to the repository
 
-      # Get the remote name based on the directory name
-      remote_name=$(basename "$dir")
+            # Get the remote name based on the directory name
+            remote_name=$(basename "$dir")
 
-      # Add remote using the directory name
-      git remote add -f "$remote_name" origin  # Force update origin if it exists
+            # Add remote using the directory name
+            git remote add -f "$remote_name" origin  # Force update origin if it exists
 
-      # Push to the remote with the same name (replace master with your branch name if needed)
-      git push -u "$remote_name" "${2:-master}"  # Use second argument as branch name, or default to master
+            # Push to the remote with the same name (replace master with your branch name if needed)
+            git push -u "$remote_name" "${2:-master}"  # Use second argument as branch name, or default to master
 
-      cd ..  # Move back to the previous directory
-    fi
-  done
+            cd ..  # Move back to the previous directory
+        fi
+    done
 }
 
 function create_project() {
-  # Get arguments
-  local project_name="$1"
-  local language="$2"
-  local extension="$3"
+    # Get arguments
+    local project_name="$1"
+    local language="$2"
+    local extension="$3"
 
-  # Validate arguments
-  if [[ -z "$project_name" || -z "$language" || -z "$extension" ]]; then
-    echo "Usage: create_project <project_name> <language> <extension>"
-    return 1
-  fi
+    # Validate arguments
+    if [[ -z "$project_name" || -z "$language" || -z "$extension" ]]; then
+        echo "Usage: create_project <project_name> <language> <extension>"
+        return 1
+    fi
 
-  # Build directory path
-  local project_dir="/home/pedrot/Desktop/Coding/$language/$project_name"
+    # Build directory path
+    local project_dir="/home/pedrot/Desktop/Coding/$language/$project_name"
 
-  # Create directory structure
-  mkdir -p "$project_dir" || { echo "Error creating directory: $project_dir"; return 1; }
+    # Create directory structure
+    mkdir -p "$project_dir" || { echo "Error creating directory: $project_dir"; return 1; }
 
-  # Create main file with extension
-  touch "$project_dir/main.$extension"
+    # Create main file with extension
+    touch "$project_dir/main.$extension"
 
-  # Initialize git repository
-  git init -b main "$project_dir" || { echo "Error initializing git repository"; return 1; }
+    # Initialize git repository
+    git init -b main "$project_dir" || { echo "Error initializing git repository"; return 1; }
 
-  echo "Project '$project_name' created in $project_dir"
+    echo "Project '$project_name' created in $project_dir"
 }
 
 confirm_v2() {
@@ -462,42 +488,44 @@ confirm_v2() {
 }
 
 merge() {
-  if [[ "$#" -lt 3 ]]; then
-    echo "Usage: merge file1 file2 ... -o outputfile"
-    return 1
-  fi
+    local script_path="/home/pedrot/.zprezto/modules/my-custom-funcs/merge.py"
 
-  # Find the output file by searching for the "-o" flag
-  for i in "$@"; do
-    if [[ "$i" == "-o" ]]; then
-      outfile="${@[$(($i+1))]}"
-      break
+    if [[ ! -f "$script_path" ]]; then
+        echo "Error: Python script not found at '$script_path'. Please check the path."
+        return 1
     fi
-  done
 
-  if [[ -z "$outfile" ]]; then
-    echo "No output file specified."
-    return 1
-  fi
-
-  # Remove the "-o" and output file from the arguments list
-  args=("${(@)@}" "-o" "$outfile")
-
-  # Overwrite or create the output file
-  > "$outfile"
-
-  # Loop through all files and append their content to the output file
-  for file in "$@"; do
-    if [[ "$file" != "-o" && "$file" != "$outfile" ]]; then
-      if [[ -f "$file" ]]; then
-        echo "=== $file ===" >> "$outfile"
-        cat "$file" >> "$outfile"
-        echo >> "$outfile" # Add a newline between file contents
-      else
-        echo "Warning: $file does not exist, skipping..."
-      fi
-    fi
-  done
-
-  echo "Merged files into $outfile."
+    python3 "$script_path" "$@"
 }
+
+create_project() {
+    python ./create_project.py "$1" "$2"
+}
+
+list_pacman_packages() {
+    local sort_by="${1:-name}"  # Default to sorting by name
+    local order="${2:-asc}"     # Default to ascending order
+
+    if [[ "$sort_by" != "name" && "$sort_by" != "size" ]]; then
+        echo "Invalid sort option. Use 'name' or 'size'."
+        return 1
+    fi
+
+    if [[ "$order" != "asc" && "$order" != "desc" ]]; then
+        echo "Invalid order option. Use 'asc' or 'desc'."
+        return 1
+    fi
+
+    local sort_option="--sort=$sort_by"
+    local order_option=$([ "$order" = "desc" ] && echo "--reverse" || echo "")
+
+    pacman -Qi | awk '/^Name/{name=$3}/^Installed Size/{size=$4" "$5; print name, size}' | sort $sort_option $order_option
+}
+
+# Add this to your .zshrc file
+function pdf2txt() {
+    python /home/pedrot/.zprezto/modules/my-custom-funcs/pdf-to-txt.py "$1" "$2"
+}
+
+alias pdf2txt='pdf2txt'
+
